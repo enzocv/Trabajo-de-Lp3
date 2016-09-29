@@ -22,14 +22,14 @@ public class Datos_MYSQL extends javax.swing.JFrame {
 
     //CREACIÓN DE VARIABLES, Y ASIGNACIÓN DE VALORES POR DEFECTO
     private String usuario = "",clave = "", puerto = "", tipoDB = "";
+    private String puertoMysql = "3306", puertoSql = "1433", puertoPostgresql = "5432";
     
     //CREACIÓN DE VARIABLE PARA PODER AGREGAR ELEMENTOS A UN JLIST
     DefaultListModel modeloLista = new DefaultListModel();
     
     public Datos_MYSQL() {
         initComponents();
-        txt_Usuario.setText("root");
-        txt_Puerto.setText("3306");
+        agregarItemsDB();
     }
 
     
@@ -111,7 +111,16 @@ public class Datos_MYSQL extends javax.swing.JFrame {
 
         jLabel2.setText("Tipo BD:");
 
-        cmb_TipoBD.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "sql", "mysql", "oracle", "postgres" }));
+        cmb_TipoBD.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cmb_TipoBDMouseClicked(evt);
+            }
+        });
+        cmb_TipoBD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_TipoBDActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Usuario:");
 
@@ -267,6 +276,7 @@ public class Datos_MYSQL extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btn_VerBDActionPerformed
 
+   
     
     //OBTENER EL LA CLAVE DEL JPASSWORD
     private String obtenerClave(){
@@ -499,6 +509,37 @@ public class Datos_MYSQL extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_cmbDataBaseActionPerformed
 
+    private void cmb_TipoBDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmb_TipoBDMouseClicked
+        
+    }//GEN-LAST:event_cmb_TipoBDMouseClicked
+
+    private void cmb_TipoBDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_TipoBDActionPerformed
+        Object cmbItem = cmb_TipoBD.getSelectedIndex();
+        if (cmbItem.equals(0)) {
+            txt_Puerto.setText(puertoSql);
+            txt_Usuario.setText("sa");
+        }
+        else if (cmbItem.equals(1)) {
+            txt_Puerto.setText(puertoMysql);
+            txt_Usuario.setText("root");
+        }
+        else if (cmbItem.equals(2)) {
+            txt_Puerto.setText(puertoMysql);
+            txt_Usuario.setText("SYSTEM");
+        }
+        else if (cmbItem.equals(3)) {
+            txt_Puerto.setText(puertoPostgresql);
+            txt_Usuario.setText("potsgres");
+        }
+    }//GEN-LAST:event_cmb_TipoBDActionPerformed
+
+    public void agregarItemsDB(){
+        cmb_TipoBD.addItem("sql");
+        cmb_TipoBD.addItem("mysql");
+        cmb_TipoBD.addItem("postgresql");
+        cmb_TipoBD.addItem("oracle");
+    }
+    
     /**
      * @param args the command line arguments
      */
