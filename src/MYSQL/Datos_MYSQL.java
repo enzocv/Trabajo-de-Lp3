@@ -13,6 +13,7 @@ import com.mysql.jdbc.*;
 import com.sun.org.apache.xml.internal.resolver.Catalog;
 import java.util.Arrays;
 import javax.swing.DefaultListModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,9 +24,13 @@ public class Datos_MYSQL extends javax.swing.JFrame {
     //CREACIÓN DE VARIABLES, Y ASIGNACIÓN DE VALORES POR DEFECTO
     private String usuario = "",clave = "", puerto = "", tipoDB = "";
     private String puertoMysql = "3306", puertoSql = "1433", puertoPostgresql = "5432";
+    private int proceso = 0, numeroColumnasConsulta = 0;
     
     //CREACIÓN DE VARIABLE PARA PODER AGREGAR ELEMENTOS A UN JLIST
     DefaultListModel modeloLista = new DefaultListModel();
+    
+    DefaultTableModel modeloTabla;
+    
     
     public Datos_MYSQL() {
         initComponents();
@@ -56,6 +61,8 @@ public class Datos_MYSQL extends javax.swing.JFrame {
         txt_clave = new javax.swing.JPasswordField();
         jScrollPane2 = new javax.swing.JScrollPane();
         list_datosDB = new javax.swing.JList<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        grid = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -130,53 +137,74 @@ public class Datos_MYSQL extends javax.swing.JFrame {
 
         jLabel6.setText("Bases de Datos:");
 
+        list_datosDB.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                list_datosDBMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(list_datosDB);
+
+        grid.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(grid);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel2)
-                        .addComponent(cmb_TipoBD, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel5))
-                            .addGap(18, 18, 18)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txt_Usuario)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(0, 0, Short.MAX_VALUE)
-                                    .addComponent(txt_clave, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addComponent(jLabel4)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(65, 65, 65)
-                            .addComponent(txt_Puerto))
-                        .addComponent(cmbDataBase, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel6))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btn_VerBD, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btn_VerVistas))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel2)
+                                .addComponent(cmb_TipoBD, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel5))
+                                    .addGap(18, 18, 18)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(txt_Usuario)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(0, 0, Short.MAX_VALUE)
+                                            .addComponent(txt_clave, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabel4)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(65, 65, 65)
+                                    .addComponent(txt_Puerto))
+                                .addComponent(cmbDataBase, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel6))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btn_VerTablas)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btn_VerBD, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btn_VerVistas))
                                 .addGap(18, 18, 18)
-                                .addComponent(btn_VerProcedures))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btn_VerTrigers)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jScrollPane2))
-                .addContainerGap(29, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btn_VerTrigers)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btn_VerTablas)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btn_VerProcedures)))))))
+                .addContainerGap(18, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(117, 117, 117))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,7 +229,7 @@ public class Datos_MYSQL extends javax.swing.JFrame {
                         .addComponent(btn_VerTablas)
                         .addComponent(btn_VerProcedures)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -218,8 +246,10 @@ public class Datos_MYSQL extends javax.swing.JFrame {
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
                         .addComponent(cmbDataBase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -326,7 +356,9 @@ public class Datos_MYSQL extends javax.swing.JFrame {
             
             
             list_datosDB.setModel(modeloLista);
-
+            
+            proceso = 1;
+            
             rs.close();
             
             
@@ -369,7 +401,7 @@ public class Datos_MYSQL extends javax.swing.JFrame {
                 modeloLista.addElement(tablas);
             }
             list_datosDB.setModel(modeloLista);
-
+            proceso = 3;
             rs.close();
             
         } catch (SQLException | HeadlessException e) {
@@ -444,7 +476,7 @@ public class Datos_MYSQL extends javax.swing.JFrame {
                 modeloLista.addElement(tablas);
             }
             list_datosDB.setModel(modeloLista);
-
+            proceso = 4; 
             rs.close();
             
         } catch (SQLException | HeadlessException e) {
@@ -485,17 +517,11 @@ public class Datos_MYSQL extends javax.swing.JFrame {
             String estructura = "";
             while (rs.next()) {
                 String tablas = rs.getString("SPECIFIC_NAME");
-                String catalog = rs.getString("ROUTINE_CATALOG");
-                String routineBD = rs.getString("ROUTINE_SCHEMA");
-                String routineName = rs.getString("ROUTINE_NAME");
-                String routineDefinition = rs.getString("ROUTINE_DEFINITION");
-                
-                Date created = rs.getDate("CREATED");
-                estructura = routineBD + routineName + routineDefinition + created;
+               
                 modeloLista.addElement(tablas);
             }
             
-           JOptionPane.showMessageDialog(this, estructura);
+            proceso = 2;
             list_datosDB.setModel(modeloLista);
 
             rs.close();
@@ -533,11 +559,112 @@ public class Datos_MYSQL extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cmb_TipoBDActionPerformed
 
+    private void list_datosDBMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list_datosDBMouseClicked
+        //OBTIENE EL VALOR SELECCIONADO DEL LIST (OBTIENE EL NOMBRE DE LA TABLA)
+        String valorLista = list_datosDB.getSelectedValue();
+        
+        //CARGA EL MODELO DE LA TABLA (AGREGA EL NOMBRE DE LAS COLUMNAS)
+        modeloTabla = new DefaultTableModel(null,getColumnas(proceso));
+        
+        //AGREGA LOS DATOS DE LA CONSULTA AL GRID
+        setFilas(valorLista, proceso);
+    }//GEN-LAST:event_list_datosDBMouseClicked
+
     public void agregarItemsDB(){
         cmb_TipoBD.addItem("sql");
         cmb_TipoBD.addItem("mysql");
         cmb_TipoBD.addItem("postgresql");
         cmb_TipoBD.addItem("oracle");
+    }
+    
+    private String[] getColumnas(int proceso){
+        
+        String columna[] = null;
+        if (proceso == 1) {
+            columna = new String[]{"Field","Type","Null","Key","Default","Extra"};
+        }
+        else if (proceso == 2) {
+            columna = new String[]{"Procedure",
+                "SQL_Mode",
+                "Create Procedure",
+                "Character Set Client",
+                "Collation Connection",
+                "DataBase Collation"};
+        }
+        else if (proceso == 3) {
+            columna = new String[]{"View",
+                "Create View",
+                "Character Set Client",
+                "Collation Connection"};
+        }
+        else if (proceso == 4) {
+            columna = new String[]{"Trigger",
+                "SQL MODE",
+                "SQL Original Statement",
+                "Character Set Client",
+                "Collation Connection",
+                "DataBase Collation"};
+        }
+        
+	return columna;
+    }
+    
+    private void setFilas(String valorLista, int proceso){
+	Connection con = null;
+        ResultSet rs = null;
+        
+        try{
+
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            String url = "jdbc:"+tipoDB+"://localhost:"+puerto+"/";
+            
+            con = DriverManager.getConnection(url,usuario,clave);
+            
+            //OBTENER EL TIPO DE BD AL CUAL ESTAMOS ACCEDIENDO
+            String DB = cmbDataBase.getSelectedItem().toString();
+            
+            //PRAPARACIÓN DE LA CONSULTA OBTIENE LOS PROCEDIMIENTOS
+            //DE CADA BD
+            Statement cmd = con.createStatement();
+            
+            if (proceso == 1) {//PROCESO PARA MOSTRAR DATOS DE UNA TABLA
+                rs = cmd.executeQuery("show columns from "+ DB +"."+valorLista);
+                numeroColumnasConsulta = 6;
+            }
+            else if (proceso == 2) {//PROCESO PARA MOSTRAR DATOS DE UN PROCEDURE
+                rs = cmd.executeQuery("show create procedure "+ DB +"."+valorLista);
+                numeroColumnasConsulta = 6;
+            }
+            else if (proceso == 3) {//PROCESO PARA MOSTRAR DATOS DE UNA VISTA
+                rs = cmd.executeQuery("show create view "+ DB +"."+valorLista);
+                numeroColumnasConsulta = 4;
+            }
+            else if (proceso == 4) {//PROCESO PARA MOSTRAR DATOS DE UNA VISTA
+                rs = cmd.executeQuery("show create trigger  "+ DB +"."+ valorLista);
+                numeroColumnasConsulta = 6;
+            }
+
+            //EN ESTE OBJETO GUARDAREMOS LOS DATOS DE LA CONSULTA
+            Object datos[] = new Object[numeroColumnasConsulta];
+
+		
+            while(rs.next()){
+
+		for(int i = 0; i < numeroColumnasConsulta; i++){
+			datos[i] = rs.getObject(i+1);
+		}
+                //AGREGAMOS LAS FILAS AL GRID
+		modeloTabla.addRow(datos);
+            }
+            //MOSTRAMOS LOS DATOS GUARDADOS ANTERIORMENTE EN EL GRID
+            grid.setModel(modeloTabla);
+            rs.close();
+
+	}
+	catch (SQLException ex){
+		JOptionPane.showMessageDialog(this, ex.getMessage());
+	}
+
     }
     
     /**
@@ -583,6 +710,7 @@ public class Datos_MYSQL extends javax.swing.JFrame {
     private javax.swing.JButton btn_VerVistas;
     private javax.swing.JComboBox<String> cmbDataBase;
     private javax.swing.JComboBox<String> cmb_TipoBD;
+    private javax.swing.JTable grid;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -590,6 +718,7 @@ public class Datos_MYSQL extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList<String> list_datosDB;
     private javax.swing.JTextField txt_Puerto;
