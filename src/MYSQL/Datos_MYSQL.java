@@ -24,7 +24,7 @@ public class Datos_MYSQL extends javax.swing.JFrame {
     //CREACIÓN DE VARIABLES, Y ASIGNACIÓN DE VALORES POR DEFECTO
     private String usuario = "",clave = "", puerto = "", tipoDB = "";
     private String puertoMysql = "3306", puertoSql = "1433", puertoPostgresql = "5432";
-    private int proceso = 0, numeroColumnasConsulta = 0;
+    private int proceso = 0, numeroColumnasConsulta = 0, objetoSeleccionado = 0;
     
     //CREACIÓN DE VARIABLE PARA PODER AGREGAR ELEMENTOS A UN JLIST
     DefaultListModel modeloLista = new DefaultListModel();
@@ -35,6 +35,7 @@ public class Datos_MYSQL extends javax.swing.JFrame {
     public Datos_MYSQL() {
         initComponents();
         agregarItemsDB();
+        
     }
 
     
@@ -45,10 +46,6 @@ public class Datos_MYSQL extends javax.swing.JFrame {
         btn_VerBD = new javax.swing.JButton();
         cmbDataBase = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        btn_VerTablas = new javax.swing.JButton();
-        btn_VerVistas = new javax.swing.JButton();
-        btn_VerTrigers = new javax.swing.JButton();
-        btn_VerProcedures = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         cmb_TipoBD = new javax.swing.JComboBox<>();
@@ -63,6 +60,7 @@ public class Datos_MYSQL extends javax.swing.JFrame {
         list_datosDB = new javax.swing.JList<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         grid = new javax.swing.JTable();
+        cmb_Objeto = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,35 +77,9 @@ public class Datos_MYSQL extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Eras Demi ITC", 2, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 102, 204));
         jLabel1.setText("CONECTAR CON MYSQL, VER OBJETOS");
-
-        btn_VerTablas.setText("Tablas");
-        btn_VerTablas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_VerTablasActionPerformed(evt);
-            }
-        });
-
-        btn_VerVistas.setText("Vistas");
-        btn_VerVistas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_VerVistasActionPerformed(evt);
-            }
-        });
-
-        btn_VerTrigers.setText("Trigers");
-        btn_VerTrigers.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_VerTrigersActionPerformed(evt);
-            }
-        });
-
-        btn_VerProcedures.setText("Procedures");
-        btn_VerProcedures.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_VerProceduresActionPerformed(evt);
-            }
-        });
 
         jButton1.setText("Info DB");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -131,11 +103,17 @@ public class Datos_MYSQL extends javax.swing.JFrame {
 
         jLabel3.setText("Usuario:");
 
+        txt_Usuario.setBackground(new java.awt.Color(153, 255, 153));
+
+        txt_Puerto.setBackground(new java.awt.Color(153, 255, 153));
+
         jLabel4.setText("Puerto");
 
         jLabel5.setText("Clave:");
 
         jLabel6.setText("Bases de Datos:");
+
+        txt_clave.setBackground(new java.awt.Color(153, 255, 153));
 
         list_datosDB.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -154,57 +132,57 @@ public class Datos_MYSQL extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(grid);
 
+        cmb_Objeto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_ObjetoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(121, 121, 121)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel2)
-                                .addComponent(cmb_TipoBD, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jLabel5))
-                                    .addGap(18, 18, 18)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txt_Usuario)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGap(0, 0, Short.MAX_VALUE)
-                                            .addComponent(txt_clave, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addComponent(jLabel4)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(65, 65, 65)
-                                    .addComponent(txt_Puerto))
-                                .addComponent(cmbDataBase, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel6))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btn_VerBD, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(btn_VerVistas))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jLabel2)
+                                        .addComponent(cmb_TipoBD, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel3)
+                                                .addComponent(jLabel5))
+                                            .addGap(18, 18, 18)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(txt_Usuario)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addGap(0, 0, Short.MAX_VALUE)
+                                                    .addComponent(txt_clave, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                        .addComponent(jLabel4)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(65, 65, 65)
+                                            .addComponent(txt_Puerto))
+                                        .addComponent(cmbDataBase, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel6))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btn_VerTrigers)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btn_VerTablas)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(btn_VerProcedures)))))))
-                .addContainerGap(18, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(117, 117, 117))
+                                        .addGap(6, 6, 6)
+                                        .addComponent(btn_VerBD)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cmb_Objeto, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButton1))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -212,25 +190,12 @@ public class Datos_MYSQL extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(btn_VerVistas)
-                                .addComponent(btn_VerTrigers)
-                                .addComponent(jButton1)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addGap(18, 18, 18)
-                            .addComponent(cmb_TipoBD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btn_VerBD)
-                        .addComponent(btn_VerTablas)
-                        .addComponent(btn_VerProcedures)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(cmb_TipoBD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txt_Usuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -246,10 +211,16 @@ public class Datos_MYSQL extends javax.swing.JFrame {
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
                         .addComponent(cmbDataBase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_VerBD)
+                            .addComponent(jButton1)
+                            .addComponent(cmb_Objeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -269,6 +240,8 @@ public class Datos_MYSQL extends javax.swing.JFrame {
         //RESULTADO DE LA CONSULTA
         Connection con = null;
         ResultSet rs = null;
+        
+        
         
         try {
             //OBTENER DATOS DEL FORMULARIO
@@ -320,95 +293,6 @@ public class Datos_MYSQL extends javax.swing.JFrame {
         return  password;
     }
     
-    private void btn_VerTablasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_VerTablasActionPerformed
-        Connection con = null;
-        ResultSet rs = null;
-       
-        
-        try {
-            
-            //OBTENER DATOS DEL FORMULARIO
-            obtenerDatosFormulario();
-            
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            String url = "jdbc:"+tipoDB+"://localhost:"+puerto+"/";
-            
-            con = DriverManager.getConnection(url,usuario,clave);
-            
-            //OBTENCIÓN DEL TIPO DE BD REQUERIDA
-            String DB = cmbDataBase.getSelectedItem().toString();
-            String todasTablas = "";
-            
-            //PREPARACIÓN DE LA CONSULTA PARA OBTENER TODAS LAS TABLAS DE LA
-            //BD SELECCIONADA
-            Statement cmd = con.createStatement();
-            
-            rs = cmd.executeQuery("USE "+DB);
-            rs = cmd.executeQuery("SHOW TABLES");
-            
-            
-            //LLENADO DE DATOS DE LA CONSULTA
-            modeloLista.removeAllElements();
-            while (rs.next()) {
-                String tablas = rs.getString("Tables_in_"+DB);
-                modeloLista.addElement(tablas);
-            }
-            
-            
-            list_datosDB.setModel(modeloLista);
-            
-            proceso = 1;
-            
-            rs.close();
-            
-            
-        } catch (SQLException | HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-    }//GEN-LAST:event_btn_VerTablasActionPerformed
-
-    private void btn_VerVistasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_VerVistasActionPerformed
-        Connection con = null;
-        ResultSet rs = null;
-       
-        
-        try {
-            
-            //OBTENER DATOS DEL FORMULARIO
-            obtenerDatosFormulario();
-            
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            String url = "jdbc:"+tipoDB+"://localhost:"+puerto+"/";
-            
-            con = DriverManager.getConnection(url,usuario,clave);
-            
-            //OBTENER EL TIPO DE BASE DE DATOS DESEADO
-            String DB = cmbDataBase.getSelectedItem().toString();
-            
-            String todasTablas = "";
-            
-            //PREPARACIÓN DE LA CONSULTA PARA OBTENER TODAS LAS VISTAS DE LAS 
-            //BD SELECCIONADAS
-            Statement cmd = con.createStatement();
-            
-            rs = cmd.executeQuery("SELECT * FROM information_schema.Tables where"+
-                                 " TABLE_TYPE = 'VIEW' and TABLE_SCHEMA = '"+DB+"'");
-            
-            //LLENADO DE DATOS DE LA CONSULTA
-            modeloLista.removeAllElements();
-            while (rs.next()) {
-                String tablas = rs.getString("TABLE_NAME");
-                modeloLista.addElement(tablas);
-            }
-            list_datosDB.setModel(modeloLista);
-            proceso = 3;
-            rs.close();
-            
-        } catch (SQLException | HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-    }//GEN-LAST:event_btn_VerVistasActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Connection con = null;
        
@@ -443,96 +327,8 @@ public class Datos_MYSQL extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void btn_VerTrigersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_VerTrigersActionPerformed
-        Connection con = null;
-        ResultSet rs = null;
-       
-        
-        try {
-            
-            //OBTENER DATOS DEL FORMULARIO
-            obtenerDatosFormulario();
-            
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            String url = "jdbc:"+tipoDB+"://localhost:"+puerto+"/";
-            
-            con = DriverManager.getConnection(url,usuario,clave);
-            
-            //OBTENER EL TIPO DE BD AL CUAL QUERAMOS ACCEDER
-            String DB = cmbDataBase.getSelectedItem().toString();
-            
-            String todasTablas = "";
-            
-            //PREPARACIÓN DE LA CONSULTA PARA OBTENER TODOS LOS TRIGGERS DE LA
-            //BD QUE QUERAMOS
-            Statement cmd = con.createStatement();
-            rs = cmd.executeQuery("USE " + DB);
-            rs = cmd.executeQuery("SHOW TRIGGERS");
-            
-            //LLENADO DE DATOS DE LA CONSULTA
-            modeloLista.removeAllElements();
-            while (rs.next()) {
-                String tablas = rs.getString("Trigger");
-                modeloLista.addElement(tablas);
-            }
-            list_datosDB.setModel(modeloLista);
-            proceso = 4; 
-            rs.close();
-            
-        } catch (SQLException | HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-    }//GEN-LAST:event_btn_VerTrigersActionPerformed
-
-    private void btn_VerProceduresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_VerProceduresActionPerformed
-
-        Connection con = null;
-        ResultSet rs = null;
-       
-        
-        try {
-            
-            //OBTENER DATOS DEL FORMULARIO
-            obtenerDatosFormulario();
-            
-            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-            String url = "jdbc:"+tipoDB+"://localhost:"+puerto+"/";
-            
-            con = DriverManager.getConnection(url,usuario,clave);
-            
-            //OBTENER EL TIPO DE BD AL CUAL ESTAMOS ACCEDIENDO
-            String DB = cmbDataBase.getSelectedItem().toString();
-            
-            //DECLARACIÓN DE VARIABLE QUE CONDENTRA LAS TODAS LAS TABLAS
-            String todasTablas = "";
-            
-            //PRAPARACIÓN DE LA CONSULTA OBTIENE LOS PROCEDIMIENTOS
-            //DE CADA BD
-            Statement cmd = con.createStatement();
-            rs = cmd.executeQuery("SELECT * FROM information_schema.routines"+
-                                  " WHERE ROUTINE_SCHEMA = '"+DB+"';");
-            
-            //LLENADO DE LOS RESULTADOS
-            modeloLista.removeAllElements();
-            String estructura = "";
-            while (rs.next()) {
-                String tablas = rs.getString("SPECIFIC_NAME");
-               
-                modeloLista.addElement(tablas);
-            }
-            
-            proceso = 2;
-            list_datosDB.setModel(modeloLista);
-
-            rs.close();
-            
-        } catch (SQLException | HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
-    }//GEN-LAST:event_btn_VerProceduresActionPerformed
-
     private void cmbDataBaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbDataBaseActionPerformed
-        // TODO add your handling code here:
+        agregarItemsObjetos();
     }//GEN-LAST:event_cmbDataBaseActionPerformed
 
     private void cmb_TipoBDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmb_TipoBDMouseClicked
@@ -570,11 +366,41 @@ public class Datos_MYSQL extends javax.swing.JFrame {
         setFilas(valorLista, proceso);
     }//GEN-LAST:event_list_datosDBMouseClicked
 
+    private void cmb_ObjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_ObjetoActionPerformed
+        Connection con = null;
+        ResultSet rs = null;
+        if (cmb_Objeto.getSelectedIndex() == 0) {
+            objetoSeleccionado = 1;
+            hacerConsulta(con, rs, objetoSeleccionado);
+        }
+        else if (cmb_Objeto.getSelectedIndex() == 1) {
+            objetoSeleccionado = 2;
+            hacerConsulta(con, rs, objetoSeleccionado);
+        }
+        else if (cmb_Objeto.getSelectedIndex() == 2) {
+            objetoSeleccionado = 3;
+            hacerConsulta(con, rs, objetoSeleccionado);
+            proceso = 3;
+        }
+        else if (cmb_Objeto.getSelectedIndex() == 3) {
+            objetoSeleccionado = 4;
+            hacerConsulta(con, rs, objetoSeleccionado);
+        }
+        
+    }//GEN-LAST:event_cmb_ObjetoActionPerformed
+
     public void agregarItemsDB(){
         cmb_TipoBD.addItem("sql");
         cmb_TipoBD.addItem("mysql");
         cmb_TipoBD.addItem("postgresql");
         cmb_TipoBD.addItem("oracle");
+    }
+    
+    public void agregarItemsObjetos(){
+        cmb_Objeto.addItem("Table");
+        cmb_Objeto.addItem("Procedure");
+        cmb_Objeto.addItem("View");
+        cmb_Objeto.addItem("Trigger");
     }
     
     private String[] getColumnas(int proceso){
@@ -639,7 +465,7 @@ public class Datos_MYSQL extends javax.swing.JFrame {
                 rs = cmd.executeQuery("show create view "+ DB +"."+valorLista);
                 numeroColumnasConsulta = 4;
             }
-            else if (proceso == 4) {//PROCESO PARA MOSTRAR DATOS DE UNA VISTA
+            else if (proceso == 4) {//PROCESO PARA MOSTRAR DATOS DE UNA TRIGGER
                 rs = cmd.executeQuery("show create trigger  "+ DB +"."+ valorLista);
                 numeroColumnasConsulta = 6;
             }
@@ -665,6 +491,94 @@ public class Datos_MYSQL extends javax.swing.JFrame {
 		JOptionPane.showMessageDialog(this, ex.getMessage());
 	}
 
+    }
+    
+    private void hacerConsulta(Connection con, ResultSet rs, int objetoSeleccionado){
+        try {
+            //OBTENER DATOS DEL FORMULARIO
+            obtenerDatosFormulario();
+            
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            String url = "jdbc:"+tipoDB+"://localhost:"+puerto+"/";
+            
+            con = DriverManager.getConnection(url,usuario,clave);
+            
+            //OBTENER EL TIPO DE BASE DE DATOS DESEADO
+            String DB = cmbDataBase.getSelectedItem().toString();
+            
+            String todasTablas = "";
+            
+            //PREPARACIÓN DE LA CONSULTA PARA OBTENER TODAS LAS VISTAS DE LAS 
+            //BD SELECCIONADAS
+            Statement cmd = con.createStatement();
+            
+            switch (objetoSeleccionado) {
+                case 1:
+                    //TABLA
+                    rs = cmd.executeQuery("USE "+DB);
+                    rs = cmd.executeQuery("SHOW TABLES");
+                    //LLENADO DE DATOS DE LA CONSULTA
+                    modeloLista.removeAllElements();
+                    while (rs.next()) {
+                        String tablas = rs.getString("Tables_in_"+DB);
+                        modeloLista.addElement(tablas);
+                    }   list_datosDB.setModel(modeloLista);
+                    proceso = 1;
+                    rs.close();
+                    break;
+                case 2:
+                    //PROCEDIMIENTO
+                    rs = cmd.executeQuery("SELECT * FROM information_schema.routines"+
+                            " WHERE ROUTINE_SCHEMA = '"+DB+"';");
+                    
+                    //LLENADO DE LOS RESULTADOS
+                    modeloLista.removeAllElements();
+                    String estructura = "";
+                    while (rs.next()) {
+                        String tablas = rs.getString("SPECIFIC_NAME");
+
+                        modeloLista.addElement(tablas);
+                    }
+
+                    proceso = 2;
+                    list_datosDB.setModel(modeloLista);
+
+                    rs.close();
+                    break;
+                case 3:
+                    //VISTA
+                    rs = cmd.executeQuery("SELECT * FROM information_schema.Tables where"+
+                            " TABLE_TYPE = 'VIEW' and TABLE_SCHEMA = '"+DB+"'");
+                    //LLENADO DE DATOS DE LA CONSULTA
+                    modeloLista.removeAllElements();
+                    while (rs.next()) {
+                        String tablas = rs.getString("TABLE_NAME");
+                        modeloLista.addElement(tablas);
+                    }   list_datosDB.setModel(modeloLista);
+                    rs.close();
+                    break;
+                case 4:
+                    //TRIGER
+                    rs = cmd.executeQuery("USE " + DB);
+                    rs = cmd.executeQuery("SHOW TRIGGERS");
+
+                    //LLENADO DE DATOS DE LA CONSULTA
+                    modeloLista.removeAllElements();
+                    while (rs.next()) {
+                        String tablas = rs.getString("Trigger");
+                        modeloLista.addElement(tablas);
+                    }
+                    list_datosDB.setModel(modeloLista);
+                    proceso = 4; 
+                    rs.close();
+                    break;
+                default:
+                    break;
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
     }
     
     /**
@@ -704,11 +618,8 @@ public class Datos_MYSQL extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_VerBD;
-    private javax.swing.JButton btn_VerProcedures;
-    private javax.swing.JButton btn_VerTablas;
-    private javax.swing.JButton btn_VerTrigers;
-    private javax.swing.JButton btn_VerVistas;
     private javax.swing.JComboBox<String> cmbDataBase;
+    private javax.swing.JComboBox<String> cmb_Objeto;
     private javax.swing.JComboBox<String> cmb_TipoBD;
     private javax.swing.JTable grid;
     private javax.swing.JButton jButton1;
